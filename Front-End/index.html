@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestion des commandes</title>
+
+    <!-- Charger la feuille de style principale -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Charger le JavaScript après la préparation du document HTML -->
+    <script type="module" src="js/app.js"></script>
+</head>
+
+<body>
+
+    <!-- Conteneur principal de l'application -->
+    <main class="container">
+
+        <!-- En-tête affiché avant la connexion -->
+        <header id="pageHeader" class="page-header">
+            <h1>Gestion des commandes</h1>
+            <p class="subtitle">Connectez-vous ou créez votre compte</p>
+        </header>
+
+        <!-- Zone d'authentification : connexion et inscription côte à côte -->
+        <section id="authArea" class="auth-layout">
+
+            <!-- Formulaire de connexion -->
+            <section class="auth-section">
+                <h2>Connexion</h2>
+
+                <form id="loginForm">
+
+                    <label for="loginEmail">Adresse e-mail</label>
+                    <input type="email" id="loginEmail" required autocomplete="email" placeholder="exemple@email.com">
+
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" required autocomplete="current-password"
+                        placeholder="Votre mot de passe">
+
+                    <button type="submit">Se connecter</button>
+                </form>
+            </section>
+
+            <!-- Formulaire d'inscription -->
+            <section class="auth-section">
+                <h2>Inscription</h2>
+
+                <form id="registerForm">
+
+                    <label for="registerName">Nom complet</label>
+                    <input type="text" id="registerName" required autocomplete="name" placeholder="Votre nom">
+
+                    <label for="registerEmail">Adresse e-mail</label>
+                    <input type="email" id="registerEmail" required autocomplete="email"
+                        placeholder="exemple@email.com">
+
+                    <label for="registerPassword">Mot de passe</label>
+                    <input type="password" id="registerPassword" required minlength="8" autocomplete="new-password"
+                        placeholder="8 caractères minimum">
+
+                    <button type="submit">Créer mon compte</button>
+                </form>
+            </section>
+
+        </section>
+
+        <!-- Zone commune pour les messages de connexion et d'inscription -->
+        <p id="message" role="status" aria-live="polite"></p>
+
+        <!-- Zone affichée après la connexion -->
+        <section id="userSection" hidden>
+
+            <!-- Informations du compte connecté -->
+            <header class="account-header">
+                <div>
+                    <h2>Mon compte</h2>
+                    <p>
+                       <h4>Bienvenue:</h4>
+                        <strong id="accountName">
+                            <span id="userName"></span>
+                        </strong>
+                    </p>
+                    <p>
+                       <h4>Email :</h4>
+                        <span id="userEmail"></span>
+                    </p>
+                    <p>
+                       <h4>Rôle :</h4>
+                        <span id="userRole"></span>
+                    </p>
+                </div>
+
+                <!-- Déconnexion de l'utilisateur -->
+                <button type="button" id="logoutButton">
+                    Se déconnecter
+                </button>
+            </header>
+
+            <!-- Navigation destinée aux clients -->
+            <nav id="clientNavigation" class="client-navigation" hidden aria-label="Navigation client">
+
+                <button type="button" id="navProduits">
+                    Catalogue
+                </button>
+
+                <button type="button" id="navPanier">
+                    Mon panier
+                </button>
+
+                <button type="button" id="mesCommandesButton">
+                    Mes commandes
+                </button>
+
+            </nav>
+
+            <!-- ESPACE ADMINISTRATEUR -->
+            <section id="adminSection" hidden>
+
+                <!-- Présentation générale de l'administration -->
+                <header class="admin-header">
+                    <div>
+                        <p class="eyebrow">ESPACE ADMINISTRATEUR</p>
+                        <h2>Gestion commerciale</h2>
+                        <p>Gérez vos produits et suivez les commandes.</p>
+                    </div>
+                </header>
+
+                <!-- Navigation latérale de l'administrateur -->
+                <div class="admin-layout">
+
+                    <aside class="admin-sidebar">
+                        <div class="sidebar-brand">
+                            <span class="brand-mark">GC</span>
+                            <div>
+                                <strong>Gestion</strong>
+                                <small>Administration</small>
+                            </div>
+                        </div>
+
+                        <p class="sidebar-label">MENU PRINCIPAL</p>
+
+                        <nav class="admin-navigation" aria-label="Navigation administrateur">
+
+                            <button type="button" id="navAdminDashboard" class="admin-nav-button active"
+                                aria-controls="adminDashboardView">
+                                <span aria-hidden="true">▦</span>
+                                Dashboard
+                            </button>
+
+                            <button type="button" id="navAdminProduits" class="admin-nav-button"
+                                aria-controls="adminProduitsView">
+                                <span aria-hidden="true">□</span>
+                                Gestion des produits
+                            </button>
+
+                            <button type="button" id="navAdminCommandes" class="admin-nav-button"
+                                aria-controls="adminCommandesView">
+                                <span aria-hidden="true">▤</span>
+                                Gestion des commandes
+                            </button>
+
+                        </nav>
+
+                        <div class="sidebar-footer">
+                            <p>Connecté en tant que</p>
+                            <strong id="adminSidebarName">Administrateur</strong>
+                            <span>Administration</span>
+                        </div>
+                    </aside>
+
+                    <!-- Contenu principal de l'administrateur -->
+                    <div class="admin-main">
+
+                        <!-- VUE 1 : DASHBOARD -->
+                        <section id="adminDashboardView" class="admin-view">
+
+                            <div class="view-heading">
+                                <div>
+                                    <p class="eyebrow">VUE D'ENSEMBLE</p>
+                                    <h2>Dashboard</h2>
+                                    <p>Résumé de votre activité commerciale.</p>
+                                </div>
+                            </div>
+
+                            <!-- Cartes statistiques alimentées par JavaScript -->
+                            <div class="stats-grid">
+
+                                <article class="stat-card">
+                                    <div class="stat-card-top">
+                                        <span class="stat-icon" aria-hidden="true">▤</span>
+                                        <span>Total</span>
+                                    </div>
+
+                                    <p class="stat-value" id="statTotalCommandes">—</p>
+
+                                    <h3>Commandes</h3>
+                                </article>
+
+                                <article class="stat-card">
+                                    <div class="stat-card-top">
+                                        <span class="stat-icon" aria-hidden="true">DH</span>
+                                        <span>Ventes</span>
+                                    </div>
+
+                                    <p class="stat-value" id="statChiffreAffaires">—</p>
+
+                                    <h3>Chiffre d'affaires</h3>
+                                </article>
+
+                                <article class="stat-card">
+                                    <div class="stat-card-top">
+                                        <span class="stat-icon" aria-hidden="true">◷</span>
+                                        <span>À traiter</span>
+                                    </div>
+
+                                    <p class="stat-value" id="statCommandesAttente">—</p>
+
+                                    <h3>Commandes en attente</h3>
+                                </article>
+
+                                <article class="stat-card">
+                                    <div class="stat-card-top">
+                                        <span class="stat-icon" aria-hidden="true">□</span>
+                                        <span>Catalogue</span>
+                                    </div>
+
+                                    <p class="stat-value" id="statTotalProduits">—</p>
+
+                                    <h3>Produits</h3>
+                                </article>
+
+                            </div>
+
+                            <!-- Tableau des commandes récentes -->
+                            <section class="dashboard-panel">
+
+                                <div class="panel-heading">
+                                    <div>
+                                        <h3>Dernières commandes</h3>
+                                        <p>Suivez les commandes récemment enregistrées.</p>
+                                    </div>
+
+                                    <button type="button" id="voirToutesCommandes" class="button-secondary">
+                                        Voir toutes les commandes
+                                    </button>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="admin-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Commande</th>
+                                                <th>Client</th>
+                                                <th>Date</th>
+                                                <th>Total</th>
+                                                <th>Statut</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="dernieresCommandesAdmin">
+                                            <tr>
+                                                <td colspan="5">
+                                                    Les commandes seront affichées ici.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p id="messageDashboard" role="status" aria-live="polite"></p>
+
+                            </section>
+
+                        </section>
+
+                        <!-- VUE 2 : GESTION DES PRODUITS -->
+                        <section id="adminProduitsView" class="admin-view" hidden>
+
+                            <div class="view-heading">
+                                <div>
+                                    <p class="eyebrow">CATALOGUE</p>
+                                    <h2>Gestion des produits</h2>
+                                    <p>Ajoutez et gérez les produits disponibles.</p>
+                                </div>
+                            </div>
+
+                            <!-- Formulaire d'ajout d'un produit -->
+                            <section class="admin-panel">
+
+                                <h3>Ajouter un produit</h3>
+
+                                <form id="formAjoutProduit">
+
+                                    <label for="nomProduit">
+                                        Nom du produit
+                                    </label>
+
+                                    <input type="text" id="nomProduit" name="nom" placeholder="Exemple : Clavier"
+                                        required>
+
+                                    <label for="prixProduit">
+                                        Prix (DH)
+                                    </label>
+
+                                    <input type="number" id="prixProduit" name="prix" min="0.01" step="0.01"
+                                        placeholder="Exemple : 350" required>
+
+                                    <label for="quantiteProduit">
+                                        Quantité en stock
+                                    </label>
+
+                                    <input type="number" id="quantiteProduit" name="quantite" min="0" step="1"
+                                        placeholder="Exemple : 10" required>
+
+                                    <button type="submit">
+                                        Ajouter le produit
+                                    </button>
+
+                                </form>
+
+                                <p id="messageAjoutProduit" role="status" aria-live="polite"></p>
+
+                            </section>
+
+                            <!-- Liste des produits et actions existantes -->
+                            <section class="admin-panel">
+
+                                <h3>Produits disponibles</h3>
+
+                                <div id="listeProduitsAdmin"></div>
+
+                                <p id="messageGestionProduits" role="status" aria-live="polite"></p>
+
+                            </section>
+
+                        </section>
+
+                        <!-- VUE 3 : GESTION DES COMMANDES -->
+                        <section id="adminCommandesView" class="admin-view" hidden>
+
+                            <div class="view-heading">
+                                <div>
+                                    <p class="eyebrow">SUIVI DES VENTES</p>
+                                    <h2>Gestion des commandes</h2>
+                                    <p>Consultez et mettez à jour les commandes clients.</p>
+                                </div>
+                            </div>
+
+                            <section id="gestionCommandesAdmin" class="admin-panel">
+
+                                <!-- Recherche et filtrage des commandes -->
+                                <form id="formRechercheCommandes" class="filters-form">
+
+                                    <div class="filter-field">
+                                        <label for="rechercheClient">
+                                            Rechercher un client
+                                        </label>
+
+                                        <input type="text" id="rechercheClient" placeholder="Nom ou email du client">
+                                    </div>
+
+                                    <div class="filter-field">
+                                        <label for="filtreStatut">
+                                            Filtrer par statut
+                                        </label>
+
+                                        <select id="filtreStatut">
+                                            <option value="">
+                                                Tous les statuts
+                                            </option>
+                                            <option value="en_attente">
+                                                En attente
+                                            </option>
+                                            <option value="confirmee">
+                                                Confirmée
+                                            </option>
+                                            <option value="en_preparation">
+                                                En préparation
+                                            </option>
+                                            <option value="expediee">
+                                                Expédiée
+                                            </option>
+                                            <option value="livree">
+                                                Livrée
+                                            </option>
+                                            <option value="annulee">
+                                                Annulée
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="filter-actions">
+                                        <button type="submit">
+                                            Rechercher
+                                        </button>
+
+                                        <button type="button" id="reinitialiserRechercheCommandes"
+                                            class="button-secondary">
+                                            Réinitialiser
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                                <!-- Messages de chargement et d'erreur -->
+                                <p id="messageCommandesAdmin" role="status" aria-live="polite"></p>
+
+                                <!-- Liste des commandes créée par JavaScript -->
+                                <div id="listeCommandesAdmin"></div>
+
+                                <!-- Pagination des résultats -->
+                                <div id="paginationCommandesAdmin"></div>
+
+                            </section>
+
+                        </section>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ESPACE CLIENT : CATALOGUE -->
+            <section id="produitsSection" hidden>
+
+                <h2>Catalogue des produits</h2>
+
+                <p id="produitsMessage" role="status" aria-live="polite"></p>
+
+                <div id="listeProduits" class="produits-grid"></div>
+
+            </section>
+
+            <!-- ESPACE CLIENT : PANIER -->
+            <section id="panierSection" hidden>
+
+                <h2>Mon panier</h2>
+
+                <div id="listePanier"></div>
+
+                <p>
+                    Total :
+                    <strong id="totalPanier">0.00 DH</strong>
+                </p>
+
+                <button type="button" id="confirmerCommande">
+                    Confirmer la commande
+                </button>
+
+                <p id="messageCommande" role="status" aria-live="polite"></p>
+
+            </section>
+
+            <!-- ESPACE CLIENT : HISTORIQUE DES COMMANDES -->
+            <section id="mesCommandesSection" hidden>
+
+                <h2>Mes commandes</h2>
+
+                <div id="listeCommandes"></div>
+
+                <p id="messageMesCommandes" role="status" aria-live="polite"></p>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
